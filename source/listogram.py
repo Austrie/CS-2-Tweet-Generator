@@ -20,19 +20,90 @@ class Listogram(list):
     def add_count(self, word, count=1):
         """Increase frequency count of given word by given count amount."""
         # TODO: Increase word frequency by count
+        word = str(word)
+        found = False
+        self.tokens += count
+        # OLD WAY
+        # import pdb; pdb.set_trace()
+        # if len(self) == 1:
+        #     if self[0][0] == word:
+        #         self[0][1] += count
+        #         found = True
+        # elif len(self) > 1:
+        #     for i in range(0, len(self) - 1):
+        #         if self[i][0] == word:
+        #             self[i][1] += count
+        #             found = True
+        #             break
+        # if found == False:
+        #     self.types += 1
+        #     self.append([word, count])
+        # print("This is the length: " + str(len(self)))
+        # for i in range(0, len(self)):
+        #     print("This num: " + str(i))
+        for i in range(0, len(self)):
+            if self[i][0] == word:
+                self[i][1] += count
+                found = True
+                break
+        if found == False:
+            self.types += 1
+            self.append([word, count])
 
     def frequency(self, word):
         """Return frequency count of given word, or 0 if word is not found."""
         # TODO: Retrieve word frequency count
+        # Dont want to duplicate code
+        # freq = 0
+        # if len(self) == 1:
+        #     if self[0][0] == word:
+        #         freq = self[0][1]
+        # elif len(self) > 1:
+        #     for i in range(0, len(self) - 1):
+        #         if self[i][0] == word:
+        #             freq = self[i][1]
+        #             break
+        word = str(word)
+        index = self._index(word)
+        return self[index][1] if index != None else 0
 
     def __contains__(self, word):
         """Return boolean indicating if given word is in this histogram."""
         # TODO: Check if word is in this histogram
+        # Dont want to duplicate code
+        # found = False
+        # if len(self) == 1:
+        #     if self[0][0] == word:
+        #         found = True
+        # elif len(self) > 1:
+        #     for i in range(0, len(self) - 1):
+        #         if self[i][0] == word:
+        #             found = True
+        #             break
+        word = str(word)
+        index = self._index(word)
+        return True if index != None else False
 
     def _index(self, target):
         """Return the index of entry containing given target word if found in
         this histogram, or None if target word is not found."""
         # TODO: Implement linear search to find index of entry with target word
+        target = str(target)
+        index = None
+        # OLD WAY
+        # if len(self) == 1:
+        #     if self[0][0] == target:
+        #         index = 0
+        # elif len(self) > 1:
+        #     for i in range(0, len(self) - 1):
+        #         if self[i][0] == target:
+        #             index = i
+        #             break
+        for i in range(0, len(self)):
+            if self[i][0] == target:
+                index = i
+                break
+        return index
 
 
 def print_histogram(word_list):

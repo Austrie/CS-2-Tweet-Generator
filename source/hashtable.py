@@ -39,6 +39,11 @@ class HashTable(object):
         TODO: Running time: O(???) Why and under what conditions?"""
         # TODO: Loop through all buckets
         # TODO: Collect all values in each bucket
+        all_values = []
+        for bucket in self.buckets:
+            for key, value in bucket.items():
+                all_values.append(value)
+        return all_values
 
     def items(self):
         """Return a list of all items (key-value pairs) in this hash table.
@@ -46,7 +51,8 @@ class HashTable(object):
         # Collect all pairs of key-value entries in each bucket
         all_items = []
         for bucket in self.buckets:
-            all_items.extend(bucket.items())
+            for item in bucket.items():
+                all_items.append(item)
         return all_items
 
     def length(self):
@@ -54,12 +60,24 @@ class HashTable(object):
         TODO: Running time: O(???) Why and under what conditions?"""
         # TODO: Loop through all buckets
         # TODO: Count number of key-value entries in each bucket
+        counter = 0
+        for bucket in self.buckets:
+            for node in bucket.items():
+                counter += 1
+        return counter
 
     def contains(self, key):
         """Return True if this hash table contains the given key, or False.
         TODO: Running time: O(???) Why and under what conditions?"""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
+        index = self._bucket_index(key)
+        bucket = self.buckets[index]
+
+        for pKey, pValue in bucket.items():
+            if pKey == key:
+                return True
+        return False
 
     def get(self, key):
         """Return the value associated with the given key, or raise KeyError.
@@ -69,6 +87,14 @@ class HashTable(object):
         # TODO: If found, return value associated with given key
         # TODO: Otherwise, raise error to tell user get failed
         # Hint: raise KeyError('Key not found: {}'.format(key))
+        index = self._bucket_index(key)
+        bucket = self.buckets[index]
+
+        for pKey, pValue in bucket.items():
+            if pKey == key:
+                return pValue
+
+        raise KeyError('Key not found: {}'.format(key))
 
     def set(self, key, value):
         """Insert or update the given key with its associated value.
@@ -77,6 +103,16 @@ class HashTable(object):
         # TODO: Check if key-value entry exists in bucket
         # TODO: If found, update value associated with given key
         # TODO: Otherwise, insert given key-value entry into bucket
+        try:
+            self.delete(key)
+        except:
+            print "No previous value"
+            pass
+
+        print "append about to happen"
+        index = self._bucket_index(key)
+        bucket = self.buckets[index]
+        bucket.append((key, value))
 
     def delete(self, key):
         """Delete the given key from this hash table, or raise KeyError.
@@ -86,6 +122,15 @@ class HashTable(object):
         # TODO: If found, delete entry associated with given key
         # TODO: Otherwise, raise error to tell user delete failed
         # Hint: raise KeyError('Key not found: {}'.format(key))
+        index = self._bucket_index(key)
+        bucket = self.buckets[index]
+
+        for node in bucket.items():
+            if node[0] == key:
+                bucket.delete(node)
+                return
+
+        raise KeyError('Key not found: {}'.format(key))
 
 
 def test_hash_table():
